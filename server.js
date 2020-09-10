@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+// purpose of keys file is to load appropriate credentials, depending on the environment
 const keys = require("./config/keys");
-const cookieSession = require('cookie-session');
-const passport = require('passport');
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 const fileUpload = require("express-fileupload");
-
-const path = require('path');
+const path = require("path");
 require("dotenv").config();
 
 // database connection
@@ -21,33 +21,27 @@ const app = express();
 
 require("./models/SentEmail");
 require("./models/User");
-require('./services/passport');
+require("./services/passport");
 const EmailSent = mongoose.model("sentemails");
 
 // tell express to use Cookies
-
 app.use(
   cookieSession({
-    maxAge: 30*24*60*60*1000, 
-    keys: [keys.cookieKey]
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey],
   })
 );
-
+// tell express about authorization
 app.use(passport.initialize());
 app.use(passport.session());
 
-require ('./routes/authRoutes')(app);
-// CSV an EMail Processing
+require("./routes/authRoutes")(app);
 
+// CSV an EMail Processing
 const csv = require("csv-parser");
 const fs = require("fs");
 var nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
-const { parseJSON } = require("jquery");
-dotenv.config();
 const { USER_EMAIL, EMAIL_PASSWORD } = process.env;
-
-// End CSV an EMail Processing
 
 app.use(fileUpload());
 
@@ -56,15 +50,10 @@ app.post("/upload", (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ msg: "No file uploaded" });
   }
-// get file
+  // get file
   const file = req.files.file;
+  // rename uploaded file to data.csv
   file.name = "data.csv";
-// get email content
-
-  const emailContent = req.body.emailContent;
-  // console.log(emailContent);
-
-  // console.log("this is from upload");
 
   file.mv(`${__dirname}/client/public/uploads/${file.name}`, (err) => {
     if (err) {
@@ -117,22 +106,20 @@ function sendEmail(list, text) {
     Following text is from front-end input field >>>>>>>:  ${text}
     `,
     dsn: {
-      id: 'some random message specific id',
-      return: 'headers',
-      notify: 'success',
-      recipient: 'vitaliy_bulyma@yahoo.ca'
-  }
+      id: "some random message specific id",
+      return: "headers",
+      notify: "success",
+      recipient: "vitaliy_bulyma@yahoo.ca",
+    },
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
-      console.log("this is accepted email: "+info.accepted[0]);
-      
+      console.log("this is accepted email: " + info.accepted[0]);
     }
   });
-  
 }
 // Compares two arrays, returns new array with unique items
 function compare(arr1, arr2) {
@@ -149,7 +136,6 @@ function compare(arr1, arr2) {
   }
   return tempArray;
 }
-
 
 // Send email Route
 app.post("/sendemails", (req, res) => {
@@ -199,7 +185,6 @@ app.post("/sendemails", (req, res) => {
             console.log("this is a TempArray of differences " + newArray);
             // sends email to emails that do not exist in db and save them to db
             for (var i = 0; i < newArray.length; i++) {
-              
               sendEmail(newArray[i], emailContent);
               let emailsent = new EmailSent({
                 email: newArray[i],
@@ -209,34 +194,22 @@ app.post("/sendemails", (req, res) => {
                 if (err) {
                   console.log(err);
                 }
-                // console.log(
-                //   "this is success message from save to db" + success
-                // );
-                // return res.json(success);
               });
-              
             }
             // check if newArray is empty
-            if(newArray.length === 0){
+            if (newArray.length === 0) {
               newArray = "No New Records in csv file. ";
             }
-            // End check if newArray is empty
 
-            // End save emails that are not and db and received email
             res.send({
               mess: `Email(s) are sent to:
 
               ${newArray}
 
               File containing data removed from the server
-              `
-            }
-              
-            );
+              `,
+            });
           });
-          // end find emails
-
-          // end of now check if emails exist in db
 
           return list;
         });
@@ -255,27 +228,23 @@ app.post("/sendemails", (req, res) => {
       setTimeout(() => {
         fs.access(path, fs.F_OK, (err) => {
           if (err) {
-            // console.error(err);
             console.log("File is successfully removed from the server");
             return;
           }
           //file exists
           console.log("File was not removed from the system");
         });
-        // End Confirmation of file Deletion
       }, 3001);
-    } //end of else file exist
+    }
   });
-}); // End Send email Route 
-
-
+}); // End Send email Route
 
 // code below will instruct heroku to serve Build folder
-if(process.env.NODE_ENV === 'production'){
-  app.use(express.static('client/build'));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
 
-  app.get('*', (req,res)=>{
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
   });
 }
 

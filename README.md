@@ -12,9 +12,9 @@ npm install in client directory
 
 create .env file in parent directory with your email and password
 
-USER_EMAIL='your@Gmail'
+USER_EMAIL='your@email'
 
-EMAIL_PASSWORD='yourgmailpassword'
+EMAIL_PASSWORD='youremailpassword'
 
 mongoURI='yourmongodbconnectionstring'
 

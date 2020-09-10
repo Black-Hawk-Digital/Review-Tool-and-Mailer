@@ -27,7 +27,6 @@ class App extends Component {
           <SideBar />
           <div id="page-content-wrapper">
             <Nav />
-
             <Route path="/" exact component={Landing} />
             <Route path="/dashboard" exact component={Dash} />
             <Route path="/reviews" exact component={Card} />

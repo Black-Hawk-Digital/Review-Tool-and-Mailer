@@ -5,12 +5,10 @@ const sentEmailSchema = new Schema(
     {
         username: {
             type: String,
-
         },
 
         email: {
             type: String,
-
         },
         sentEmailFlag:{
             type: String, 

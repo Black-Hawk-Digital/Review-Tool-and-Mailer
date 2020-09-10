@@ -1,10 +1,7 @@
 import React, { Component} from 'react';
 import {connect} from 'react-redux';
 
-
-
-class Nav extends Component { 
-    
+class Nav extends Component {  
   
   renderContent(){
     if(this.props.auth){
@@ -37,7 +34,7 @@ class Nav extends Component {
         document.getElementById("menu-toggle").innerText="Hide Menu";
       }else{
         document.getElementById("menu-toggle").innerText="Show Menu";
-      }    
+      }
       
     }
   
