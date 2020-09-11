@@ -75,5 +75,15 @@ run command below in the main folder to run the app on localhost
 ```bash
 npm run dev
 ```
+3. Create .gitignore file: 
 
+```
+client/node_modules/
+dev.js
+client/build
+.env
+data.csv
+node_modules
+
+```
 
