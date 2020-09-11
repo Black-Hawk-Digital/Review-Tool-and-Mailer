@@ -87,6 +87,7 @@ app.post("/upload", (req, res) => {
 function sendEmail(list, text) {
   var transporter = nodemailer.createTransport({
     // service: "gmail",
+    // change line below with your email provider smt server
     host: "smtp.privateemail.com",
     port: 587,
     secure: false,
@@ -99,7 +100,7 @@ function sendEmail(list, text) {
   var mailOptions = {
     from: USER_EMAIL,
     to: list,
-    subject: "Just Testing",
+    subject: "Testing",
     text: `
     I am sending you this email from 
     application using emails from uploaded CSV file.
@@ -109,7 +110,7 @@ function sendEmail(list, text) {
       id: "some random message specific id",
       return: "headers",
       notify: "success",
-      recipient: "vitaliy_bulyma@yahoo.ca",
+      recipient: "youremail@goes.here",
     },
   };
 
@@ -198,7 +199,7 @@ app.post("/sendemails", (req, res) => {
             }
             // check if newArray is empty
             if (newArray.length === 0) {
-              newArray = "No New Records in csv file. ";
+              newArray = "No New Records are found in the CSV file. ";
             }
 
             res.send({
