@@ -25,6 +25,7 @@ User is able to upload a  CSV file from the computer, the app will send the file
 * Allow for better verification of the uploaded file, such as file format
 * Improve the logic of searching for an email in the CSV file. As it is coded right now the app is looking for the field "Email" only, need to improve the logic to also include "email", "emails", "Emails", "customer_emails", etc
 * Include retrieving other information from the CSV file, such as name of the person(to make an email content more individually tailored), postal code, or any other information available in the CSV  file
+* Handle Empty Strings to exclude them from rendering
 
 
 ### Mailer 
